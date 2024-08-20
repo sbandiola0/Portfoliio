@@ -1,18 +1,40 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Initializing GSAP and ScrollTrigger
+    // Initialize GSAP and ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    // Fade-in effect for hero content and image
-    const heroContent = document.querySelector('.hero-content');
-    const heroImage = document.querySelector('.hero-image');
+    // Add custom cursor
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
 
-    heroContent.style.opacity = 0;
-    heroImage.style.opacity = 0;
-
-    window.addEventListener('load', () => {
-        heroContent.style.animation = 'slideInLeft 1s ease forwards';
-        heroImage.style.animation = 'slideInRight 1s ease forwards';
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = `${e.pageX}px`;
+        cursor.style.top = `${e.pageY}px`;
     });
+
+    // Array of colors to cycle through
+    const colors = ['#ff8a00', '#e52e71', '#9b00e8', '#00f0ff'];
+    let currentColorIndex = 0;
+
+    // Function to change color
+    function changeColor() {
+        cursor.style.background = `${colors[currentColorIndex]}99`;
+        currentColorIndex = (currentColorIndex + 1) % colors.length;
+    }
+
+    // Change color periodically
+    setInterval(changeColor, 5000);
+
+    // Fade-in effect for hero content and image
+    gsap.fromTo(".hero-content", 
+        { opacity: 0, x: -100 },
+        { opacity: 1, x: 0, duration: 1 }
+    );
+
+    gsap.fromTo(".hero-image", 
+        { opacity: 0, x: 100 },
+        { opacity: 1, x: 0, duration: 1 }
+    );
 
     // Parallax effect for hero section
     gsap.to(".container", {
@@ -30,113 +52,84 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fade-in effect for About Me section
     gsap.fromTo(".about-me", 
         { opacity: 0, scale: 0.9, y: 100 },
-        { opacity: 1, scale: 1, y: 0,
+        { opacity: 1, scale: 1, y: 0, 
           scrollTrigger: {
               trigger: ".about-me",
               start: "top 75%",
               end: "top 25%",
-              scrub: true,
-              onEnter: () => document.querySelector('.about-me').classList.add('visible')
+              scrub: true
           }
         }
     );
 
     // Fade-out effect for About Me section
-    gsap.to(".about-me",
-        { opacity: 0, y: -100,
-          scrollTrigger: {
-              trigger: ".about-me",
-              start: "top top",
-              end: "bottom top",
-              scrub: true
-          }
+    gsap.to(".about-me", {
+        opacity: 0,
+        y: -100,
+        scrollTrigger: {
+            trigger: ".about-me",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+            pin: true
         }
-    );
+    });
 
     // Fade-in effect for Education section
-    gsap.fromTo(".education-certification",
-        { opacity: 0, y: 100 },
+    gsap.fromTo(".education-certification", 
+        { opacity: 0, y: 100 }, 
         { opacity: 1, y: 0,
           scrollTrigger: {
               trigger: ".education-certification",
               start: "top 75%",
               end: "top 25%",
               scrub: true,
-              onEnter: () => document.querySelector('.education-certification').classList.add('visible')
+              pin: true
           }
         }
     );
 
-    // Fade-out effect for Education section
-    gsap.to(".education-certification",
-        { opacity: 0, y: -100,
-          scrollTrigger: {
-              trigger: ".education-certification",
-              start: "top top",
-              end: "bottom top",
-              scrub: true
-          }
-        }
-    );
-
-    // Fade-in effect for Education timeline
-    gsap.fromTo(".education-timeline",
+    // Fade-in effect for Education Timeline
+    gsap.fromTo(".education-timeline", 
         { opacity: 0, y: 100 },
         { opacity: 1, y: 0,
           scrollTrigger: {
               trigger: ".education-timeline",
               start: "top 75%",
               end: "top 25%",
-              scrub: true,
-              onEnter: () => document.querySelector('.education-timeline').classList.add('visible')
-          }
-        }
-    );
-
-    // Fade-out effect for Education timeline
-    gsap.to(".education-timeline",
-        { opacity: 0, y: -100,
-          scrollTrigger: {
-              trigger: ".education-timeline",
-              start: "top top",
-              end: "bottom top",
               scrub: true
           }
         }
     );
 
-    // Timeline items animation - appear one by one after the Education section
-    gsap.fromTo(".timeline-item",
+    // Fade-in effect for Timeline Items
+    gsap.fromTo(".timeline-item", 
         { opacity: 0, x: -100 },
         { opacity: 1, x: 0,
           scrollTrigger: {
-              trigger: ".education-timeline",
+              trigger: ".timeline-item",
               start: "top center",
               end: "bottom top",
-              scrub: true,
-              // Ensure timeline items animate after .education-timeline is visible
+              scrub: true
           },
-          stagger: 0.2, // Stagger items by 0.2s
-          delay: 0.5
+          stagger: 0.2
         }
     );
 
-    // Fade-in effect for Certificates section
-     // Fade-in and fade-out effects for Certificates section
-     gsap.fromTo(".certificates",
-        { opacity: 0, y: 100 },
+    // Fade-in and fade-out effects for Certificates section
+    gsap.fromTo(".certificates", 
+        { opacity: 0, y: -100 },
         { opacity: 1, y: 0,
           scrollTrigger: {
               trigger: ".certificates",
               start: "top 75%",
               end: "top 25%",
-              scrub: true,
-              onEnter: () => document.querySelector('.certificates').classList.add('visible')
+              scrub: true
           }
         }
     );
 
-    gsap.to(".certificates",
+    gsap.to(".certificates", 
         { opacity: 0, y: -100,
           scrollTrigger: {
               trigger: ".certificates",
@@ -148,17 +141,27 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     // Fade-in effect for Certificate items
-    gsap.fromTo(".certificate-item",
+    gsap.fromTo(".certificate-item", 
         { opacity: 0, y: 100 },
         { opacity: 1, y: 0,
           scrollTrigger: {
               trigger: ".certificates",
-              start: "top 75%",
-              end: "top 25%",
-              scrub: true,
+              scrub: true
           },
           stagger: 0.2
         }
     );
 
+    // Fade-in effect for Footer
+    gsap.fromTo(".footer-container", 
+        { opacity: 0, scale: 0.9, y: 100 },
+        { opacity: 1, scale: 1, y: 0,
+          scrollTrigger: {
+              trigger: ".footer-container",
+              start: "top 75%",
+              end: "top 25%",
+              scrub: true
+          }
+        }
+    );
 });
